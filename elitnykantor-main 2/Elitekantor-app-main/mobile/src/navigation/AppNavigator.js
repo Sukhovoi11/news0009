@@ -6,11 +6,11 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import WalletTopUpScreen from '../screens/WalletTopUpScreen';
-import RatesScreen from '../screens/RatesScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import PortfolioScreen from '../screens/PortfolioScreen';
 import TradeScreen from '../screens/TradeScreen';
-import RatesHistoryScreen from '../screens/RatesHistoryScreen';
+import SpendingStatsScreen from '../screens/SpendingStatsScreen';
+import BudgetInsightsScreen from '../screens/BudgetInsightsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,11 +59,6 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
                             options={{ title: 'Wydatki i kategorie' }}
                         />
                         <Stack.Screen
-                            name="Rates"
-                            component={RatesScreen}
-                            options={{ title: 'Rynek i kursy' }}
-                        />
-                        <Stack.Screen
                             name="History"
                             component={HistoryScreen}
                             options={{ title: 'Historia operacji' }}
@@ -74,9 +69,14 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
                             options={{ title: 'Portfele i konta' }}
                         />
                         <Stack.Screen
-                            name="RatesHistory"
-                            component={RatesHistoryScreen}
-                            options={{ title: 'Trendy rynku' }}
+                            name="Stats"
+                            component={SpendingStatsScreen}
+                            options={{ title: 'Statystyki wydatków' }}
+                        />
+                        <Stack.Screen
+                            name="Insights"
+                            component={BudgetInsightsScreen}
+                            options={{ title: 'Plan i cele' }}
                         />
                     </>
                 )}

@@ -30,10 +30,10 @@ export default function DashboardScreen({ navigation, onLogout }) {
             <View style={localStyles.gridContainer}>
                 <MenuCard title="Dodaj przychód" icon="💸" screen="WalletTopUp" color="#0F766E" />
                 <MenuCard title="Wydatki" icon="🧾" screen="Trade" color="#0F766E" />
-                <MenuCard title="Rynek" icon="📈" screen="Rates" color="#1D4ED8" />
                 <MenuCard title="Portfele" icon="💼" screen="Portfolio" color="#2563EB" />
                 <MenuCard title="Historia" icon="📒" screen="History" color="#475569" />
-                <MenuCard title="Analizy" icon="📊" screen="RatesHistory" color="#0F766E" />
+                <MenuCard title="Statystyki" icon="🧩" screen="Stats" color="#0F766E" />
+                <MenuCard title="Plan i cele" icon="🎯" screen="Insights" color="#1D4ED8" />
             </View>
 
             {/* Кнопка выхода */}
