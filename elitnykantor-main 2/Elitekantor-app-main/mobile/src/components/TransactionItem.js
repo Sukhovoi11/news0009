@@ -15,10 +15,11 @@ export default function TransactionItem({
     SELL: 'Wymiana',
     INCOME: 'Przychód',
     EXPENSE: 'Wydatek',
+    SAVING: 'Oszczędności',
   };
 
   const title =
-    type === 'EXPENSE'
+    type === 'EXPENSE' || type === 'SAVING'
       ? `${typeLabels[type] || type} • ${currency_from}`
       : `${typeLabels[type] || type} • ${currency_from} → ${currency_to}`;
 
@@ -33,7 +34,7 @@ export default function TransactionItem({
               Kwota: <Text style={{ fontWeight: 'bold' }}>{amount} {currency_to || ''}</Text>
             </Text>
             <Text style={{ color: '#4B5563' }}>
-              Kurs/Przelicznik: {rate ?? (type === 'EXPENSE' || type === 'INCOME' ? '1' : '-')}
+              Kurs/Przelicznik: {rate ?? (type === 'EXPENSE' || type === 'INCOME' || type === 'SAVING' ? '1' : '-')}
             </Text>
           </View>
           <Text style={{ fontSize: 11, color: '#94A3B8', marginTop: 8, fontStyle: 'italic' }}>{created_at}</Text>

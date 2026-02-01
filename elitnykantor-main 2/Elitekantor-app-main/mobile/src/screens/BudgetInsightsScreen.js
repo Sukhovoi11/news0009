@@ -1,5 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
 
@@ -8,6 +17,11 @@ const TARGET_BUDGET = 2500;
 export default function BudgetInsightsScreen() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [goals, setGoals] = useState([]);
+  const [goalTitle, setGoalTitle] = useState('');
+  const [goalTarget, setGoalTarget] = useState('');
+  const [goalDueDate, setGoalDueDate] = useState('');
+  const [contributionInputs, setContributionInputs] = useState({});
 
   const loadHistory = async () => {
     try {
@@ -22,9 +36,56 @@ export default function BudgetInsightsScreen() {
     }
   };
 
+  const loadGoals = async () => {
+    try {
+      const res = await api.get('/goals');
+      setGoals(res.data || []);
+    } catch (err) {
+      console.log('ERR GOALS:', err?.response?.data || err.message);
+      setGoals([]);
+    }
+  };
+
   useEffect(() => {
     loadHistory();
+    loadGoals();
   }, []);
+
+  const handleCreateGoal = async () => {
+    const targetValue = parseFloat(goalTarget);
+    if (!goalTitle || !targetValue || targetValue <= 0) {
+      return Alert.alert('Błąd', 'Podaj nazwę celu i poprawną kwotę.');
+    }
+
+    try {
+      await api.post('/goals', {
+        title: goalTitle,
+        targetAmount: targetValue,
+        dueDate: goalDueDate || null,
+      });
+      setGoalTitle('');
+      setGoalTarget('');
+      setGoalDueDate('');
+      loadGoals();
+    } catch (err) {
+      Alert.alert('Błąd', 'Nie udało się zapisać celu.');
+    }
+  };
+
+  const handleContribution = async (goalId) => {
+    const value = parseFloat(contributionInputs[goalId]);
+    if (!value || value <= 0) {
+      return Alert.alert('Błąd', 'Podaj poprawną kwotę.');
+    }
+    try {
+      await api.post(`/goals/${goalId}/contribute`, { amount: value });
+      setContributionInputs((prev) => ({ ...prev, [goalId]: '' }));
+      loadGoals();
+      loadHistory();
+    } catch (err) {
+      Alert.alert('Błąd', err?.response?.data?.message || 'Nie udało się odłożyć środków.');
+    }
+  };
 
   const summary = useMemo(() => {
     const expenses = history.filter((item) => item.type === 'EXPENSE');
@@ -102,6 +163,88 @@ export default function BudgetInsightsScreen() {
               </Text>
             </View>
           </View>
+
+          <View style={localStyles.card}>
+            <Text style={localStyles.cardTitle}>Cele oszczędnościowe</Text>
+            <Text style={localStyles.sectionHint}>
+              Zdefiniuj cel i odkładaj środki bezpośrednio z portfela.
+            </Text>
+
+            <View style={localStyles.formRow}>
+              <TextInput
+                style={[styles.input, localStyles.inlineInput]}
+                placeholder="Np. Wakacje w Hiszpanii"
+                placeholderTextColor="#94A3B8"
+                value={goalTitle}
+                onChangeText={setGoalTitle}
+              />
+              <TextInput
+                style={[styles.input, localStyles.inlineInput]}
+                placeholder="Kwota PLN"
+                placeholderTextColor="#94A3B8"
+                keyboardType="numeric"
+                value={goalTarget}
+                onChangeText={setGoalTarget}
+              />
+              <TextInput
+                style={[styles.input, localStyles.inlineInput]}
+                placeholder="Termin (YYYY-MM-DD)"
+                placeholderTextColor="#94A3B8"
+                value={goalDueDate}
+                onChangeText={setGoalDueDate}
+              />
+              <TouchableOpacity style={localStyles.primaryButton} onPress={handleCreateGoal}>
+                <Text style={localStyles.primaryButtonText}>Dodaj cel</Text>
+              </TouchableOpacity>
+            </View>
+
+            {goals.length === 0 ? (
+              <Text style={localStyles.emptyText}>Brak celów. Dodaj pierwszy cel oszczędnościowy.</Text>
+            ) : (
+              goals.map((goal) => {
+                const progress = goal.target_amount
+                  ? Math.min(goal.saved_amount / goal.target_amount, 1)
+                  : 0;
+                return (
+                  <View key={goal.goal_id} style={localStyles.goalCard}>
+                    <View style={localStyles.goalHeader}>
+                      <Text style={localStyles.goalTitle}>{goal.title}</Text>
+                      {goal.due_date ? (
+                        <Text style={localStyles.goalDue}>Termin: {goal.due_date}</Text>
+                      ) : null}
+                    </View>
+                    <View style={localStyles.progressTrack}>
+                      <View style={[localStyles.progressFill, { width: `${progress * 100}%` }]} />
+                    </View>
+                    <View style={localStyles.row}>
+                      <Text style={localStyles.label}>Zebrano</Text>
+                      <Text style={localStyles.value}>
+                        {Number(goal.saved_amount).toFixed(2)} / {Number(goal.target_amount).toFixed(2)} PLN
+                      </Text>
+                    </View>
+                    <View style={localStyles.contributionRow}>
+                      <TextInput
+                        style={[styles.input, localStyles.contributionInput]}
+                        placeholder="Odłóż kwotę"
+                        placeholderTextColor="#94A3B8"
+                        keyboardType="numeric"
+                        value={contributionInputs[goal.goal_id] || ''}
+                        onChangeText={(text) =>
+                          setContributionInputs((prev) => ({ ...prev, [goal.goal_id]: text }))
+                        }
+                      />
+                      <TouchableOpacity
+                        style={localStyles.secondaryButton}
+                        onPress={() => handleContribution(goal.goal_id)}
+                      >
+                        <Text style={localStyles.secondaryButtonText}>Odłóż</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              })
+            )}
+          </View>
         </>
       )}
     </ScrollView>
@@ -157,6 +300,11 @@ const localStyles = StyleSheet.create({
     marginTop: 8,
     fontSize: 13,
   },
+  sectionHint: {
+    color: '#64748B',
+    marginBottom: 12,
+    fontSize: 13,
+  },
   tip: {
     backgroundColor: '#F8FAFC',
     borderRadius: 16,
@@ -170,6 +318,66 @@ const localStyles = StyleSheet.create({
   },
   tipText: {
     color: '#64748B',
+    fontSize: 13,
+  },
+  formRow: {
+    marginBottom: 12,
+  },
+  inlineInput: {
+    marginBottom: 12,
+  },
+  primaryButton: {
+    backgroundColor: '#0F766E',
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  primaryButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+  goalCard: {
+    backgroundColor: '#F8FAFC',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  goalHeader: {
+    marginBottom: 8,
+  },
+  goalTitle: {
+    color: '#0F172A',
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  goalDue: {
+    color: '#64748B',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  contributionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  contributionInput: {
+    flex: 1,
+    marginRight: 10,
+  },
+  secondaryButton: {
+    backgroundColor: '#E2E8F0',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+  secondaryButtonText: {
+    color: '#0F172A',
+    fontWeight: '700',
+  },
+  emptyText: {
+    color: '#94A3B8',
     fontSize: 13,
   },
 });

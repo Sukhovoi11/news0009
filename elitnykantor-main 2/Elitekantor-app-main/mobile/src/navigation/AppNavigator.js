@@ -11,6 +11,7 @@ import PortfolioScreen from '../screens/PortfolioScreen';
 import TradeScreen from '../screens/TradeScreen';
 import SpendingStatsScreen from '../screens/SpendingStatsScreen';
 import BudgetInsightsScreen from '../screens/BudgetInsightsScreen';
+import PaymentRemindersScreen from '../screens/PaymentRemindersScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,11 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
                             name="Insights"
                             component={BudgetInsightsScreen}
                             options={{ title: 'Plan i cele' }}
+                        />
+                        <Stack.Screen
+                            name="Reminders"
+                            component={PaymentRemindersScreen}
+                            options={{ title: 'Przypomnienia o płatnościach' }}
                         />
                     </>
                 )}

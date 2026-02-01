@@ -34,6 +34,7 @@ export default function DashboardScreen({ navigation, onLogout }) {
                 <MenuCard title="Historia" icon="📒" screen="History" color="#475569" />
                 <MenuCard title="Statystyki" icon="🧩" screen="Stats" color="#0F766E" />
                 <MenuCard title="Plan i cele" icon="🎯" screen="Insights" color="#1D4ED8" />
+                <MenuCard title="Przypomnienia" icon="⏰" screen="Reminders" color="#F97316" />
             </View>
 
             {/* Кнопка выхода */}
