@@ -56,7 +56,7 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
                         <Stack.Screen
                             name="Trade"
                             component={TradeScreen}
-                            options={{ title: 'Wymiana i transfery' }}
+                            options={{ title: 'Wydatki i kategorie' }}
                         />
                         <Stack.Screen
                             name="Rates"

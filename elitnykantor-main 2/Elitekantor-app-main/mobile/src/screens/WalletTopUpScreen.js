@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, Alert, Keyboard,
-  TouchableWithoutFeedback, TouchableOpacity,
-  ActivityIndicator, Platform, StyleSheet, ScrollView
+  View,
+  Text,
+  TextInput,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  ScrollView,
 } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
-import * as WebBrowser from 'expo-web-browser';
 import AppButton from '../components/AppButton';
 
 export default function WalletTopUpScreen() {
@@ -40,50 +47,26 @@ export default function WalletTopUpScreen() {
     }
   };
 
-  const performPayUTopup = async (value) => {
+  const handleIncome = async (value) => {
     try {
-      const res = await api.post('/payments/payu/create', { amount: value });
-      const redirectUri = res.data.redirectUri;
-
-      if (!redirectUri) {
-        return notify('Błąd', 'Brak adresu płatności PayU');
-      }
-
-      // Открываем браузер для оплаты
-      await WebBrowser.openBrowserAsync(redirectUri);
-
-      // Эмуляция зачисления (для Sandbox)
       await api.post('/wallet/topup', { amount: value });
 
-      notify('Sukces', 'Konto zostało zasilone (PayU Sandbox)');
+      notify('Sukces', 'Przychód został dodany do portfela');
       setAmount('');
       loadPortfolio();
     } catch (err) {
-      console.log('ERR PAYU:', err?.response?.data || err.message);
-      notify('Błąd', 'Nie udało się utworzyć płatności');
+      console.log('ERR TOPUP:', err?.response?.data || err.message);
+      notify('Błąd', 'Nie udało się dodać przychodu');
     }
   };
 
-  const handleTopUpPayU = () => {
+  const handleTopUp = () => {
     const value = parseFloat(amount);
     if (!value || value <= 0) {
       return notify('Błąd', 'Podaj poprawną kwotę w PLN');
     }
 
-    if (Platform.OS === 'web') {
-      if (window.confirm(`Czy chcesz zasilić konto kwotą ${value.toFixed(2)} PLN przez PayU?`)) {
-        performPayUTopup(value);
-      }
-    } else {
-      Alert.alert(
-          'Potwierdzenie',
-          `Czy na pewno chcesz zasilić konto kwotą ${value.toFixed(2)} PLN przez PayU?`,
-          [
-            { text: 'Anuluj', style: 'cancel' },
-            { text: 'Tak', onPress: () => performPayUTopup(value) },
-          ]
-      );
-    }
+    handleIncome(value);
   };
 
   return (
@@ -132,12 +115,12 @@ export default function WalletTopUpScreen() {
 
             <AppButton
                 title="Dodaj przychód"
-                onPress={handleTopUpPayU}
+                onPress={handleTopUp}
                 style={{ backgroundColor: '#0F766E', borderColor: '#0F766E' }}
             />
 
             <Text style={localStyles.footerNote}>
-              Przychód zostanie zapisany w historii finansowej.
+              Przychód zostanie od razu zapisany w historii finansowej.
             </Text>
           </View>
         </ScrollView>

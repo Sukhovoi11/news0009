@@ -1,21 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, Text, TextInput, Alert, TouchableOpacity, Keyboard,
-  TouchableWithoutFeedback, KeyboardAvoidingView, Platform,
-  ScrollView, ActivityIndicator, StyleSheet
+  View,
+  Text,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
 import AppButton from '../components/AppButton';
 
+const EXPENSE_CATEGORIES = [
+  { key: 'TRANSPORT', label: 'Transport' },
+  { key: 'JEDZENIE', label: 'Jedzenie' },
+  { key: 'MIESZKANIE', label: 'Mieszkanie' },
+  { key: 'ZDROWIE', label: 'Zdrowie' },
+  { key: 'ROZRYWKA', label: 'Rozrywka' },
+  { key: 'INNE', label: 'Inne' },
+];
+
 export default function TradeScreen() {
-  const [mode, setMode] = useState('BUY');
-  const [currency, setCurrency] = useState('EUR');
   const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState(EXPENSE_CATEGORIES[0].key);
   const [portfolio, setPortfolio] = useState([]);
   const [loadingPortfolio, setLoadingPortfolio] = useState(false);
-  const [codes, setCodes] = useState([]);
-  const [loadingCodes, setLoadingCodes] = useState(false);
 
   const loadPortfolio = async () => {
     try {
@@ -23,144 +38,103 @@ export default function TradeScreen() {
       const res = await api.get('/wallet/portfolio');
       setPortfolio(res.data || []);
     } catch (err) {
-      console.log('ERR PORTFOLIO (trade):', err?.response?.data || err.message);
+      console.log('ERR PORTFOLIO (expenses):', err?.response?.data || err.message);
     } finally {
       setLoadingPortfolio(false);
     }
   };
 
-  const loadCodes = async () => {
-    try {
-      setLoadingCodes(true);
-      const res = await api.get('/rates/current');
-      const list = (res.data.rates || []).map((r) => r.code);
-      setCodes(list);
-    } catch (err) {
-      console.log('ERR CODES (trade):', err?.response?.data || err.message);
-    } finally {
-      setLoadingCodes(false);
-    }
-  };
-
   useEffect(() => {
     loadPortfolio();
-    loadCodes();
   }, []);
 
   const plnBalance = portfolio.find((p) => p.currency_code === 'PLN')?.amount ?? 0;
 
   const handleSubmit = async () => {
     const value = parseFloat(amount);
-    const notify = (t, m) => Platform.OS === 'web' ? window.alert(m) : Alert.alert(t, m);
+    const notify = (t, m) => (Platform.OS === 'web' ? window.alert(m) : Alert.alert(t, m));
 
     if (!value || value <= 0) return notify('Błąd', 'Podaj poprawną kwotę');
 
     try {
-      if (mode === 'BUY') {
-        const res = await api.post('/transactions/buy', {
-          currencyTo: currency.toUpperCase(),
-          amountPln: value,
-        });
-        notify('Sukces', `Dodano przychód ${res.data.amountForeign.toFixed(2)} ${currency}`);
-      } else {
-        const res = await api.post('/transactions/sell', {
-          currencyFrom: currency.toUpperCase(),
-          amountForeign: value,
-        });
-        notify('Sukces', `Zapisano wydatek ${res.data.amountPln.toFixed(2)} PLN`);
-      }
+      const res = await api.post('/transactions/expense', {
+        category,
+        amountPln: value,
+      });
+      notify('Sukces', `Wydatek zapisany: ${res.data.amountPln.toFixed(2)} PLN`);
       setAmount('');
       loadPortfolio();
     } catch (err) {
-      notify('Błąd', err?.response?.data?.message || 'Nie udało się wykonać transakcji.');
+      notify('Błąd', err?.response?.data?.message || 'Nie udało się zapisać wydatku.');
     }
   };
 
   return (
-      <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView
-              style={[styles.container, {backgroundColor: '#F8FAFC'}]}
-              keyboardShouldPersistTaps="handled"
-          >
-            <Text style={[styles.title, {color: '#0F172A'}]}>Transfery i wymiana</Text>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView style={[styles.container, { backgroundColor: '#F8FAFC' }]} keyboardShouldPersistTaps="handled">
+          <Text style={[styles.title, { color: '#0F172A' }]}>Wydatki i kategorie</Text>
+          <Text style={localStyles.subtitle}>
+            Wybierz kategorię i zapisz wydatek, aby od razu pojawił się w historii.
+          </Text>
 
-            {/* Баланс в новом стиле */}
-            <View style={localStyles.balanceBox}>
-              <Text style={{ color: '#E2E8F0', fontSize: 13, fontWeight: '600' }}>Dostępne środки:</Text>
-              {loadingPortfolio ? (
-                  <ActivityIndicator size="small" color="#FFF" />
-              ) : (
-                  <Text style={localStyles.balanceAmount}>{plnBalance.toFixed(2)} PLN</Text>
-              )}
-            </View>
-
-            {/* Переключатель Купить/Продать */}
-            <View style={localStyles.tabContainer}>
-              <TouchableOpacity
-                  style={[localStyles.tab, mode === 'BUY' && localStyles.tabActive]}
-                  onPress={() => setMode('BUY')}
-              >
-                <Text style={[localStyles.tabText, mode === 'BUY' && localStyles.tabTextActive]}>Przychód</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                  style={[localStyles.tab, mode === 'SELL' && localStyles.tabActive]}
-                  onPress={() => setMode('SELL')}
-              >
-                <Text style={[localStyles.tabText, mode === 'SELL' && localStyles.tabTextActive]}>Wydatek</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.label}>Kwota ({mode === 'BUY' ? 'PLN' : currency}):</Text>
-            <TextInput
-                style={[styles.input, {backgroundColor: '#FFF'}]}
-                value={amount}
-                onChangeText={setAmount}
-                keyboardType="numeric"
-                placeholder="0.00"
-            />
-
-            <AppButton
-                title={mode === 'BUY' ? 'Dodaj przychód' : 'Dodaj wydatek'}
-                onPress={handleSubmit}
-                style={{ backgroundColor: '#0F766E', borderColor: '#0F766E' }} // Зеленая кнопка
-            />
-
-            <Text style={[styles.label, { marginTop: 10 }]}>Wybierz walutę konta:</Text>
-
-            {loadingCodes ? (
-                <ActivityIndicator color="#0F172A" />
+          <View style={localStyles.balanceBox}>
+            <Text style={localStyles.balanceLabel}>Dostępne środki:</Text>
+            {loadingPortfolio ? (
+              <ActivityIndicator size="small" color="#FFF" />
             ) : (
-                <View style={localStyles.currencyGrid}>
-                  {codes.map((code) => (
-                      <TouchableOpacity
-                          key={code}
-                          style={[
-                            localStyles.chip,
-                            currency.toUpperCase() === code && localStyles.chipSelected,
-                          ]}
-                          onPress={() => setCurrency(code)}
-                      >
-                        <Text style={[
-                          localStyles.chipText,
-                          currency.toUpperCase() === code && { color: 'white' }
-                        ]}>
-                          {code}
-                        </Text>
-                      </TouchableOpacity>
-                  ))}
-                </View>
+              <Text style={localStyles.balanceAmount}>{plnBalance.toFixed(2)} PLN</Text>
             )}
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          </View>
+
+          <Text style={styles.label}>Kwota wydatku (PLN)</Text>
+          <TextInput
+            style={[styles.input, { backgroundColor: '#FFF' }]}
+            value={amount}
+            onChangeText={setAmount}
+            keyboardType="numeric"
+            placeholder="0.00"
+          />
+
+          <Text style={[styles.label, { marginTop: 4 }]}>Kategoria wydatku</Text>
+          <View style={localStyles.categoryGrid}>
+            {EXPENSE_CATEGORIES.map((item) => (
+              <TouchableOpacity
+                key={item.key}
+                style={[
+                  localStyles.chip,
+                  category === item.key && localStyles.chipSelected,
+                ]}
+                onPress={() => setCategory(item.key)}
+              >
+                <Text
+                  style={[
+                    localStyles.chipText,
+                    category === item.key && localStyles.chipTextSelected,
+                  ]}
+                >
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <AppButton
+            title="Dodaj wydatek"
+            onPress={handleSubmit}
+            style={{ backgroundColor: '#0F766E', borderColor: '#0F766E' }}
+          />
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
 const localStyles = StyleSheet.create({
+  subtitle: {
+    color: '#64748B',
+    marginBottom: 16,
+  },
   balanceBox: {
     backgroundColor: '#0F172A',
     padding: 20,
@@ -171,41 +145,22 @@ const localStyles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
   },
+  balanceLabel: {
+    color: '#E2E8F0',
+    fontSize: 13,
+    fontWeight: '600',
+  },
   balanceAmount: {
     fontWeight: '900',
     fontSize: 26,
     color: '#FFFFFF',
     marginTop: 4,
   },
-  tabContainer: {
+  categoryGrid: {
     flexDirection: 'row',
-    backgroundColor: '#E2E8F0',
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 20,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  tabActive: {
-    backgroundColor: '#FFFFFF',
-    elevation: 2,
-  },
-  tabText: {
-    fontWeight: '600',
-    color: '#64748B',
-  },
-  tabTextActive: {
-    color: '#0F172A',
-  },
-  currencyGrid: {
-    flexDirection: 'row', // В ряд
-    flexWrap: 'wrap',    // Перенос строки
-    marginTop: 10,
-    paddingBottom: 40,
+    flexWrap: 'wrap',
+    marginTop: 8,
+    marginBottom: 12,
   },
   chip: {
     backgroundColor: '#FFFFFF',
@@ -216,7 +171,7 @@ const localStyles = StyleSheet.create({
     marginBottom: 8,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    minWidth: 60,
+    minWidth: 90,
     alignItems: 'center',
   },
   chipSelected: {
@@ -226,5 +181,8 @@ const localStyles = StyleSheet.create({
   chipText: {
     fontWeight: '700',
     color: '#475569',
-  }
+  },
+  chipTextSelected: {
+    color: '#FFFFFF',
+  },
 });
