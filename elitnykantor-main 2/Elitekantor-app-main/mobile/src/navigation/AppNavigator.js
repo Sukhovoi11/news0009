@@ -20,9 +20,9 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
             <Stack.Navigator
                 screenOptions={{
                   headerStyle: {
-                    backgroundColor: '#0B0B0F', // ЧЕРНЫЙ
+                    backgroundColor: '#0F172A',
                   },
-                  headerTintColor: '#FF2E93', // РОЗОВЫЙ ТЕКСТ
+                  headerTintColor: '#F8FAFC',
                   headerTitleStyle: {
                     fontWeight: '900',
                     fontSize: 18,
@@ -35,48 +35,48 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
             >
                 {!isLoggedIn ? (
                     <>
-                        <Stack.Screen name="Login" options={{ title: 'EliteKantor – Zaloguj się' }}>
+                        <Stack.Screen name="Login" options={{ title: 'Finanse+ – Zaloguj się' }}>
                             {(props) => <LoginScreen {...props} onLogin={onLogin} />}
                         </Stack.Screen>
-                        <Stack.Screen name="Register" options={{ title: 'Nowe Konto Premium' }}>
+                        <Stack.Screen name="Register" options={{ title: 'Utwórz konto Finanse+' }}>
                             {(props) => <RegisterScreen {...props} />}
                         </Stack.Screen>
                     </>
                 ) : (
                     <>
-                        <Stack.Screen name="Dashboard" options={{ title: 'ELITEKANTOR' }}>
+                        <Stack.Screen name="Dashboard" options={{ title: 'Finanse osobiste' }}>
                             {(props) => <DashboardScreen {...props} onLogout={onLogout} />}
                         </Stack.Screen>
 
                         <Stack.Screen
                             name="WalletTopUp"
                             component={WalletTopUpScreen}
-                            options={{ title: 'Zasilenie Konta' }}
+                            options={{ title: 'Dodaj przychód' }}
                         />
                         <Stack.Screen
                             name="Trade"
                             component={TradeScreen}
-                            options={{ title: 'Giełda Walut' }}
+                            options={{ title: 'Wymiana i transfery' }}
                         />
                         <Stack.Screen
                             name="Rates"
                             component={RatesScreen}
-                            options={{ title: 'Kursy na Żywo' }}
+                            options={{ title: 'Rynek i kursy' }}
                         />
                         <Stack.Screen
                             name="History"
                             component={HistoryScreen}
-                            options={{ title: 'Historia Transakcji' }}
+                            options={{ title: 'Historia operacji' }}
                         />
                         <Stack.Screen
                             name="Portfolio"
                             component={PortfolioScreen}
-                            options={{ title: 'Twój Portfel' }}
+                            options={{ title: 'Portfele i konta' }}
                         />
                         <Stack.Screen
                             name="RatesHistory"
                             component={RatesHistoryScreen}
-                            options={{ title: 'Statystyki NBP' }}
+                            options={{ title: 'Trendy rynku' }}
                         />
                     </>
                 )}

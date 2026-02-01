@@ -61,13 +61,13 @@ export default function TradeScreen() {
           currencyTo: currency.toUpperCase(),
           amountPln: value,
         });
-        notify('Sukces', `Kupiono ${res.data.amountForeign.toFixed(2)} ${currency} po kursie ${res.data.rate}`);
+        notify('Sukces', `Dodano przychód ${res.data.amountForeign.toFixed(2)} ${currency}`);
       } else {
         const res = await api.post('/transactions/sell', {
           currencyFrom: currency.toUpperCase(),
           amountForeign: value,
         });
-        notify('Sukces', `Sprzedano za ${res.data.amountPln.toFixed(2)} PLN po kursie ${res.data.rate}`);
+        notify('Sukces', `Zapisano wydatek ${res.data.amountPln.toFixed(2)} PLN`);
       }
       setAmount('');
       loadPortfolio();
@@ -86,11 +86,11 @@ export default function TradeScreen() {
               style={[styles.container, {backgroundColor: '#F8FAFC'}]}
               keyboardShouldPersistTaps="handled"
           >
-            <Text style={[styles.title, {color: '#004D40'}]}>Giełda Walut</Text>
+            <Text style={[styles.title, {color: '#0F172A'}]}>Transfery i wymiana</Text>
 
             {/* Баланс в новом стиле */}
             <View style={localStyles.balanceBox}>
-              <Text style={{ color: '#E8F5E9', fontSize: 13, fontWeight: '600' }}>Dostępne środки:</Text>
+              <Text style={{ color: '#E2E8F0', fontSize: 13, fontWeight: '600' }}>Dostępne środки:</Text>
               {loadingPortfolio ? (
                   <ActivityIndicator size="small" color="#FFF" />
               ) : (
@@ -104,13 +104,13 @@ export default function TradeScreen() {
                   style={[localStyles.tab, mode === 'BUY' && localStyles.tabActive]}
                   onPress={() => setMode('BUY')}
               >
-                <Text style={[localStyles.tabText, mode === 'BUY' && localStyles.tabTextActive]}>Kupno</Text>
+                <Text style={[localStyles.tabText, mode === 'BUY' && localStyles.tabTextActive]}>Przychód</Text>
               </TouchableOpacity>
               <TouchableOpacity
                   style={[localStyles.tab, mode === 'SELL' && localStyles.tabActive]}
                   onPress={() => setMode('SELL')}
               >
-                <Text style={[localStyles.tabText, mode === 'SELL' && localStyles.tabTextActive]}>Sprzedaż</Text>
+                <Text style={[localStyles.tabText, mode === 'SELL' && localStyles.tabTextActive]}>Wydatek</Text>
               </TouchableOpacity>
             </View>
 
@@ -124,15 +124,15 @@ export default function TradeScreen() {
             />
 
             <AppButton
-                title={mode === 'BUY' ? 'Realizuj kupno' : 'Realizuj sprzedaż'}
+                title={mode === 'BUY' ? 'Dodaj przychód' : 'Dodaj wydatek'}
                 onPress={handleSubmit}
-                style={{ backgroundColor: '#00C853', borderColor: '#00C853' }} // Зеленая кнопка
+                style={{ backgroundColor: '#0F766E', borderColor: '#0F766E' }} // Зеленая кнопка
             />
 
-            <Text style={[styles.label, { marginTop: 10 }]}>Wybierz walutę:</Text>
+            <Text style={[styles.label, { marginTop: 10 }]}>Wybierz walutę konta:</Text>
 
             {loadingCodes ? (
-                <ActivityIndicator color="#004D40" />
+                <ActivityIndicator color="#0F172A" />
             ) : (
                 <View style={localStyles.currencyGrid}>
                   {codes.map((code) => (
@@ -162,7 +162,7 @@ export default function TradeScreen() {
 
 const localStyles = StyleSheet.create({
   balanceBox: {
-    backgroundColor: '#004D40',
+    backgroundColor: '#0F172A',
     padding: 20,
     borderRadius: 20,
     marginBottom: 20,
@@ -199,7 +199,7 @@ const localStyles = StyleSheet.create({
     color: '#64748B',
   },
   tabTextActive: {
-    color: '#004D40',
+    color: '#0F172A',
   },
   currencyGrid: {
     flexDirection: 'row', // В ряд
@@ -220,8 +220,8 @@ const localStyles = StyleSheet.create({
     alignItems: 'center',
   },
   chipSelected: {
-    backgroundColor: '#004D40',
-    borderColor: '#004D40',
+    backgroundColor: '#0F172A',
+    borderColor: '#0F172A',
   },
   chipText: {
     fontWeight: '700',

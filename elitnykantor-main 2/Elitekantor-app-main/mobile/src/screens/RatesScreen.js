@@ -29,7 +29,11 @@ export default function RatesScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Kursy na żywo</Text>
+      <Text style={styles.title}>Rynek i kursy</Text>
+
+      <Text style={{ color: '#64748B', marginBottom: 12 }}>
+        Monitoruj bieżące kursy, by planować wydatki i podróże.
+      </Text>
 
       <AppButton title="Odśwież dane" onPress={loadRates} />
 
@@ -42,7 +46,7 @@ export default function RatesScreen() {
       {loading ? (
         <ActivityIndicator
           size="large"
-          color="#FF2E93"
+          color="#0F766E"
           style={{ marginTop: 20 }}
         />
       ) : (

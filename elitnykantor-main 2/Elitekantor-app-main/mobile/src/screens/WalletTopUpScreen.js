@@ -67,7 +67,7 @@ export default function WalletTopUpScreen() {
   const handleTopUpPayU = () => {
     const value = parseFloat(amount);
     if (!value || value <= 0) {
-      return notify('Błąd', 'Podaj poprawną kwotę в PLN');
+      return notify('Błąd', 'Podaj poprawną kwotę w PLN');
     }
 
     if (Platform.OS === 'web') {
@@ -89,25 +89,25 @@ export default function WalletTopUpScreen() {
   return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={[styles.container, { backgroundColor: '#F8FAFC' }]}>
-          <Text style={[styles.title, { color: '#004D40' }]}>Zasilenie Konta</Text>
+          <Text style={[styles.title, { color: '#0F172A' }]}>Dodaj przychód</Text>
 
           {/* Инфо-бокс с балансом */}
           <TouchableOpacity onPress={loadPortfolio} activeOpacity={0.8}>
             <View style={localStyles.balanceCard}>
-              <Text style={{ color: '#E8F5E9', fontSize: 14 }}>Twoje saldo PLN:</Text>
+              <Text style={{ color: '#E2E8F0', fontSize: 14 }}>Dostępne środki w budżecie:</Text>
               {loadingPortfolio ? (
                   <ActivityIndicator size="small" color="#FFF" />
               ) : (
                   <Text style={localStyles.balanceText}>{plnBalance.toFixed(2)} PLN</Text>
               )}
               <Text style={{ color: '#A5D6A7', fontSize: 11, marginTop: 10 }}>
-                Kliknij, aby odświeżyć stan portfela
+                Kliknij, aby odświeżyć saldo
               </Text>
             </View>
           </TouchableOpacity>
 
           <View style={localStyles.authCardCustom}>
-            <Text style={styles.label}>Kwota doładowania (PLN)</Text>
+            <Text style={styles.label}>Kwota przychodu (PLN)</Text>
             <TextInput
                 style={[styles.input, localStyles.bigInput]}
                 value={amount}
@@ -131,13 +131,13 @@ export default function WalletTopUpScreen() {
             </View>
 
             <AppButton
-                title="Zapłać z PayU"
+                title="Dodaj przychód"
                 onPress={handleTopUpPayU}
-                style={{ backgroundColor: '#00C853', borderColor: '#00C853' }}
+                style={{ backgroundColor: '#0F766E', borderColor: '#0F766E' }}
             />
 
             <Text style={localStyles.footerNote}>
-              Płatność zostanie przetworzona bezpiecznie.
+              Przychód zostanie zapisany w historii finansowej.
             </Text>
           </View>
         </ScrollView>
@@ -147,7 +147,7 @@ export default function WalletTopUpScreen() {
 
 const localStyles = StyleSheet.create({
   balanceCard: {
-    backgroundColor: '#004D40',
+    backgroundColor: '#0F172A',
     padding: 25,
     borderRadius: 24,
     marginBottom: 25,
@@ -174,8 +174,8 @@ const localStyles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
     height: 70,
-    backgroundColor: '#F1F5F9',
-    color: '#004D40',
+    backgroundColor: '#F8FAFC',
+    color: '#0F172A',
   },
   quickGrid: {
     flexDirection: 'row', // В ряд
@@ -185,13 +185,13 @@ const localStyles = StyleSheet.create({
   },
   quickChip: {
     width: '30%',
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#E2E8F0',
     padding: 12,
     borderRadius: 12,
     alignItems: 'center',
   },
   quickChipText: {
-    color: '#2E7D32',
+    color: '#0F172A',
     fontWeight: '700',
   },
   footerNote: {

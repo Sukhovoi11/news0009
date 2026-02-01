@@ -49,10 +49,10 @@ export default function RatesHistoryScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Archiwum NBP</Text>
+      <Text style={styles.title}>Trendy rynku</Text>
 
       <View style={localStyles.card}>
-        <Text style={styles.label}>Symbol waluty</Text>
+        <Text style={styles.label}>Symbol waluty / indeksu</Text>
         <TextInput
           style={styles.input}
           value={symbol}
@@ -70,7 +70,14 @@ export default function RatesHistoryScreen() {
               ]}
               onPress={() => setSymbol(cur)}
             >
-              <Text style={localStyles.chipText}>{cur}</Text>
+              <Text
+                style={[
+                  localStyles.chipText,
+                  symbol === cur && localStyles.chipTextSelected,
+                ]}
+              >
+                {cur}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -78,11 +85,11 @@ export default function RatesHistoryScreen() {
 
       <View style={localStyles.resultArea}>
         <Text style={localStyles.sectionTitle}>
-          Ostatnie 15 notowań {symbol}
+          Ostatnie 15 odczytów {symbol}
         </Text>
 
         {loading ? (
-          <ActivityIndicator color="#FF2E93" size="large" />
+          <ActivityIndicator color="#0F766E" size="large" />
         ) : history.length ? (
           history.map((item, index) => (
             <View key={index} style={localStyles.historyItem}>
@@ -102,37 +109,38 @@ export default function RatesHistoryScreen() {
 
 const localStyles = StyleSheet.create({
   card: {
-    backgroundColor: '#16161D',
+    backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#2A2A35',
+    borderColor: '#E2E8F0',
     marginBottom: 20,
   },
   chipContainer: { flexDirection: 'row', marginTop: 15 },
   chip: {
-    backgroundColor: '#0F0F15',
+    backgroundColor: '#F8FAFC',
     padding: 12,
     borderRadius: 14,
     marginRight: 10,
     minWidth: 60,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#2A2A35',
+    borderColor: '#E2E8F0',
   },
-  chipSelected: { backgroundColor: '#FF2E93' },
-  chipText: { fontWeight: '800', color: '#F5F5F7' },
+  chipSelected: { backgroundColor: '#0F766E', borderColor: '#0F766E' },
+  chipText: { fontWeight: '800', color: '#0F172A' },
+  chipTextSelected: { color: '#FFFFFF' },
   resultArea: {
-    backgroundColor: '#16161D',
+    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#2A2A35',
+    borderColor: '#E2E8F0',
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#FF2E93',
+    color: '#0F766E',
     marginBottom: 15,
   },
   historyItem: {
@@ -140,9 +148,9 @@ const localStyles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A35',
+    borderBottomColor: '#E2E8F0',
   },
-  dateText: { color: '#9A9AA3', fontWeight: '700' },
-  rateText: { color: '#34D399', fontWeight: '900' },
-  emptyText: { textAlign: 'center', color: '#9A9AA3' },
+  dateText: { color: '#64748B', fontWeight: '700' },
+  rateText: { color: '#0F766E', fontWeight: '900' },
+  emptyText: { textAlign: 'center', color: '#94A3B8' },
 });

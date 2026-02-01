@@ -37,13 +37,13 @@ export default function RegisterScreen({ navigation }) {
   return (
       <View style={styles.container}>
         <View style={styles.authCard}>
-          <Text style={styles.title}>ELITEKANTOR</Text>
-          <Text style={styles.subtitle}>Rejestracja Nowego Klienta</Text>
+          <Text style={styles.title}>Finanse+</Text>
+          <Text style={styles.subtitle}>Załóż konto i uporządkuj budżet</Text>
 
           <Text style={styles.label}>Twój Email</Text>
           <TextInput
               style={styles.input}
-              placeholder="np. klient@premium.pl"
+              placeholder="np. kasa@finanse.pl"
               placeholderTextColor="#9CA3AF"
               value={email}
               onChangeText={setEmail}
@@ -62,7 +62,7 @@ export default function RegisterScreen({ navigation }) {
           />
 
           <View style={{ marginTop: 10 }}>
-            <AppButton title="Utwórz konto Elite" onPress={handleRegister} />
+            <AppButton title="Utwórz konto" onPress={handleRegister} />
           </View>
 
           <AppButton

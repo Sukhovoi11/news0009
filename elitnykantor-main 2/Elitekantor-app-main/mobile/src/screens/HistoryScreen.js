@@ -38,7 +38,7 @@ export default function HistoryScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Historia transakcji</Text>
+      <Text style={styles.title}>Historia operacji</Text>
 
       {loading ? (
         <ActivityIndicator size="large" style={{ marginTop: 16 }} />

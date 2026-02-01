@@ -36,12 +36,12 @@ export default function LoginScreen({ navigation, onLogin }) {
   return (
       <View style={styles.container}>
         <View style={styles.authCard}>
-          <Text style={styles.title}>ELITEKANTOR</Text>
-          <Text style={styles.subtitle}>Logowanie Premium</Text>
+          <Text style={styles.title}>Finanse+</Text>
+          <Text style={styles.subtitle}>Zaloguj się do panelu finansów osobistych</Text>
 
           <Text style={styles.label}>Adres Email</Text>
           <TextInput
-              placeholder="email@elitekantor.pl"
+              placeholder="email@finanse.pl"
               placeholderTextColor="#9CA3AF"
               value={email}
               onChangeText={setEmail}
@@ -52,7 +52,7 @@ export default function LoginScreen({ navigation, onLogin }) {
 
           <Text style={styles.label}>Hasło</Text>
           <TextInput
-              placeholder="podaj hasło"
+              placeholder="wpisz hasło"
               placeholderTextColor="#9CA3AF"
               value={password}
               onChangeText={setPassword}

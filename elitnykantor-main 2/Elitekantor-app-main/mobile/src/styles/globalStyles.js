@@ -4,34 +4,34 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#0B0B0F', // ЧЕРНЫЙ ФОН
+    backgroundColor: '#F8FAFC',
   },
 
   title: {
-    fontSize: 30,
-    fontWeight: '900',
+    fontSize: 28,
+    fontWeight: '800',
     marginBottom: 6,
-    color: '#FF2E93', // ЯРКИЙ РОЗОВЫЙ
-    letterSpacing: -0.8,
+    color: '#0F172A',
+    letterSpacing: -0.4,
   },
 
   subtitle: {
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 28,
-    color: '#FF7AB6', // МЯГКИЙ РОЗОВЫЙ
+    color: '#64748B',
   },
 
   authCard: {
-    backgroundColor: '#16161D',
+    backgroundColor: '#FFFFFF',
     padding: 24,
-    borderRadius: 22,
+    borderRadius: 20,
     marginTop: '5%',
     borderWidth: 1,
-    borderColor: '#2A2A35',
-    shadowColor: '#FF2E93',
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
+    borderColor: '#E2E8F0',
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
     elevation: 8,
   },
 
@@ -39,41 +39,41 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     marginBottom: 8,
-    color: '#9A9AA3',
+    color: '#94A3B8',
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
 
   input: {
     borderWidth: 1.5,
-    borderColor: '#2A2A35',
+    borderColor: '#E2E8F0',
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 15,
     marginBottom: 20,
-    backgroundColor: '#0F0F15',
+    backgroundColor: '#F8FAFC',
     fontSize: 16,
-    color: '#F5F5F7',
+    color: '#0F172A',
   },
 
   menuButton: {
-    backgroundColor: '#16161D',
+    backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     paddingVertical: 18,
     paddingHorizontal: 20,
     borderRadius: 18,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#2A2A35',
-    shadowColor: '#FF2E93',
-    shadowOpacity: 0.12,
+    borderColor: '#E2E8F0',
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
   },
 
   menuButtonText: {
     fontSize: 16,
-    color: '#FF2E93',
+    color: '#0F172A',
     fontWeight: '800',
   },
 
@@ -83,40 +83,40 @@ export const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 12,
     borderRadius: 18,
-    backgroundColor: '#16161D',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#2A2A35',
+    borderColor: '#E2E8F0',
   },
 
   infoBox: {
     padding: 24,
     borderRadius: 22,
-    backgroundColor: '#FF2E93',
+    backgroundColor: '#0F766E',
     marginBottom: 26,
-    shadowColor: '#FF2E93',
-    shadowOpacity: 0.35,
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.2,
     shadowRadius: 14,
     elevation: 8,
   },
 
   infoBoxText: {
-    color: '#0B0B0F',
+    color: '#F8FAFC',
     fontSize: 18,
     fontWeight: '900',
   },
   textPrimary: {
-    color: '#F5F5F7',
+    color: '#0F172A',
     fontSize: 16,
     fontWeight: '600',
   },
 
   textSecondary: {
-    color: '#9A9AA3',
+    color: '#64748B',
     fontSize: 14,
   },
 
   textAccent: {
-    color: '#FF2E93',
+    color: '#0F766E',
     fontWeight: '800',
   },
 

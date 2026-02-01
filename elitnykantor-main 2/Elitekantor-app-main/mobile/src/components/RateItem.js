@@ -8,9 +8,9 @@ export default function RateItem({ code, mid, currencyName, date }) {
       style={[
         styles.cardRow,
         {
-          backgroundColor: '#16161D',
+          backgroundColor: '#FFFFFF',
           borderWidth: 1,
-          borderColor: '#2A2A35',
+          borderColor: '#E2E8F0',
           paddingVertical: 14,
           marginBottom: 12,
         },
@@ -21,7 +21,7 @@ export default function RateItem({ code, mid, currencyName, date }) {
           style={{
             fontWeight: '900',
             fontSize: 16,
-            color: '#FF2E93', // 🔥 КОД ВАЛЮТЫ — РОЗОВЫЙ
+            color: '#0F172A',
           }}
         >
           {code}
@@ -31,7 +31,7 @@ export default function RateItem({ code, mid, currencyName, date }) {
           <Text
             style={{
               fontSize: 12,
-              color: '#9A9AA3', // читаемый серый
+              color: '#64748B',
               marginTop: 2,
             }}
           >
@@ -45,7 +45,7 @@ export default function RateItem({ code, mid, currencyName, date }) {
           style={{
             fontWeight: '900',
             fontSize: 16,
-            color: '#34D399', // 💹 неоново-зелёный курс
+            color: '#0F766E',
           }}
         >
           {Number(mid).toFixed(4)}
@@ -55,7 +55,7 @@ export default function RateItem({ code, mid, currencyName, date }) {
           <Text
             style={{
               fontSize: 10,
-              color: '#9A9AA3',
+              color: '#94A3B8',
               marginTop: 2,
             }}
           >
