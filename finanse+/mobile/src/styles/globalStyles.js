@@ -3,30 +3,30 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 16,
     backgroundColor: '#F8FAFC',
   },
 
   title: {
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 6,
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 4,
     color: '#0F172A',
     letterSpacing: -0.4,
   },
 
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    marginBottom: 28,
+    marginBottom: 18,
     color: '#64748B',
   },
 
   authCard: {
     backgroundColor: '#FFFFFF',
-    padding: 24,
-    borderRadius: 20,
-    marginTop: '5%',
+    padding: 18,
+    borderRadius: 16,
+    marginTop: '4%',
     borderWidth: 1,
     borderColor: '#E2E8F0',
     shadowColor: '#0F172A',
@@ -36,9 +36,9 @@ export const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 6,
     color: '#94A3B8',
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -47,22 +47,22 @@ export const styles = StyleSheet.create({
   input: {
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 15,
-    marginBottom: 20,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 16,
     backgroundColor: '#F8FAFC',
-    fontSize: 16,
+    fontSize: 15,
     color: '#0F172A',
   },
 
   menuButton: {
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
-    paddingVertical: 18,
-    paddingHorizontal: 20,
-    borderRadius: 18,
-    marginBottom: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#E2E8F0',
     shadowColor: '#0F172A',
@@ -72,27 +72,27 @@ export const styles = StyleSheet.create({
   },
 
   menuButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#0F172A',
-    fontWeight: '800',
+    fontWeight: '700',
   },
 
   cardRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 18,
-    marginBottom: 12,
-    borderRadius: 18,
+    padding: 14,
+    marginBottom: 10,
+    borderRadius: 14,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
 
   infoBox: {
-    padding: 24,
-    borderRadius: 22,
+    padding: 18,
+    borderRadius: 18,
     backgroundColor: '#0F766E',
-    marginBottom: 26,
+    marginBottom: 18,
     shadowColor: '#0F172A',
     shadowOpacity: 0.2,
     shadowRadius: 14,
@@ -101,18 +101,18 @@ export const styles = StyleSheet.create({
 
   infoBoxText: {
     color: '#F8FAFC',
-    fontSize: 18,
-    fontWeight: '900',
+    fontSize: 16,
+    fontWeight: '800',
   },
   textPrimary: {
     color: '#0F172A',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
 
   textSecondary: {
     color: '#64748B',
-    fontSize: 14,
+    fontSize: 12,
   },
 
   textAccent: {
