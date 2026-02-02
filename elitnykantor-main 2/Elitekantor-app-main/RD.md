@@ -1,4 +1,4 @@
-## Aplikacja finansowa „Finanse+”
+## Projekt i implementacja mobilnej aplikacji do zarządzania finansami osobistymi „Finanse+” z wykorzystaniem React Native, Node.js oraz SQLite
 
 
 ## Opis
