@@ -16,6 +16,7 @@ import {
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
 import AppButton from '../components/AppButton';
+import BottomNav from '../components/BottomNav';
 
 const EXPENSE_CATEGORIES = [
   { key: 'TRANSPORT', label: 'Transport' },
@@ -26,7 +27,7 @@ const EXPENSE_CATEGORIES = [
   { key: 'INNE', label: 'Inne' },
 ];
 
-export default function TradeScreen() {
+export default function TradeScreen({ navigation }) {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState(EXPENSE_CATEGORIES[0].key);
   const [portfolio, setPortfolio] = useState([]);
@@ -70,9 +71,14 @@ export default function TradeScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView style={[styles.container, { backgroundColor: '#F8FAFC' }]} keyboardShouldPersistTaps="handled">
+    <View style={localStyles.screen}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            style={[styles.container, { backgroundColor: '#F8FAFC' }]}
+            contentContainerStyle={localStyles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+          >
           <Text style={[styles.title, { color: '#0F172A' }]}>Wydatki i kategorie</Text>
           <Text style={localStyles.subtitle}>
             Wybierz kategorię i zapisz wydatek, aby od razu pojawił się w historii.
@@ -126,20 +132,30 @@ export default function TradeScreen() {
           />
         </ScrollView>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+      <BottomNav navigation={navigation} activeRoute="Trade" />
+    </View>
   );
 }
 
 const localStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+  },
+  scrollContent: {
+    paddingBottom: 120,
+  },
   subtitle: {
     color: '#64748B',
-    marginBottom: 16,
+    marginBottom: 12,
+    fontSize: 12,
   },
   balanceBox: {
     backgroundColor: '#0F172A',
-    padding: 20,
-    borderRadius: 20,
-    marginBottom: 20,
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 10,
@@ -147,12 +163,12 @@ const localStyles = StyleSheet.create({
   },
   balanceLabel: {
     color: '#E2E8F0',
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
   },
   balanceAmount: {
-    fontWeight: '900',
-    fontSize: 26,
+    fontWeight: '800',
+    fontSize: 20,
     color: '#FFFFFF',
     marginTop: 4,
   },
@@ -160,18 +176,18 @@ const localStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 8,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   chip: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
     marginRight: 8,
     marginBottom: 8,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    minWidth: 90,
+    minWidth: 84,
     alignItems: 'center',
   },
   chipSelected: {
@@ -181,6 +197,7 @@ const localStyles = StyleSheet.create({
   chipText: {
     fontWeight: '700',
     color: '#475569',
+    fontSize: 12,
   },
   chipTextSelected: {
     color: '#FFFFFF',

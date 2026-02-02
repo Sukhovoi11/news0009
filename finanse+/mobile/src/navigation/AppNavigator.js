@@ -12,6 +12,7 @@ import TradeScreen from '../screens/TradeScreen';
 import SpendingStatsScreen from '../screens/SpendingStatsScreen';
 import BudgetInsightsScreen from '../screens/BudgetInsightsScreen';
 import PaymentRemindersScreen from '../screens/PaymentRemindersScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +47,7 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
                 ) : (
                     <>
                         <Stack.Screen name="Dashboard" options={{ title: 'Finanse osobiste' }}>
-                            {(props) => <DashboardScreen {...props} onLogout={onLogout} />}
+                            {(props) => <DashboardScreen {...props} />}
                         </Stack.Screen>
 
                         <Stack.Screen
@@ -84,6 +85,9 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
                             component={PaymentRemindersScreen}
                             options={{ title: 'Przypomnienia o płatnościach' }}
                         />
+                        <Stack.Screen name="Profile" options={{ title: 'Profil użytkownika' }}>
+                            {(props) => <ProfileScreen {...props} onLogout={onLogout} />}
+                        </Stack.Screen>
                     </>
                 )}
             </Stack.Navigator>

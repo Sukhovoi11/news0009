@@ -1,110 +1,285 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
+import BottomNav from '../components/BottomNav';
 
-export default function DashboardScreen({ navigation, onLogout }) {
-    // Вспомогательная функция для отрисовки плитки
-    const MenuCard = ({ title, icon, screen, color = '#004D40' }) => (
-        <TouchableOpacity
-            style={localStyles.gridCard}
-            onPress={() => navigation.navigate(screen)}
-        >
-            <View style={[localStyles.iconCircle, { backgroundColor: color + '15' }]}>
-                <Text style={{ fontSize: 24 }}>{icon}</Text>
-            </View>
-            <Text style={localStyles.cardTitle}>{title}</Text>
-        </TouchableOpacity>
-    );
+export default function DashboardScreen({ navigation }) {
+    const [loading, setLoading] = useState(false);
+    const [plnBalance, setPlnBalance] = useState(0);
+    const [expenseTotal, setExpenseTotal] = useState(0);
+    const [transactionsCount, setTransactionsCount] = useState(0);
+    const [recentTransactions, setRecentTransactions] = useState([]);
+
+    const loadSummary = useCallback(async () => {
+        try {
+            setLoading(true);
+            const [portfolioRes, historyRes] = await Promise.all([
+                api.get('/wallet/portfolio'),
+                api.get('/transactions/history'),
+            ]);
+
+            const portfolio = portfolioRes.data || [];
+            const history = historyRes.data || [];
+            const pln = portfolio.find((item) => item.currency_code === 'PLN')?.amount ?? 0;
+            const expenseSum = history
+                .filter((item) => item.type === 'EXPENSE')
+                .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+
+            setPlnBalance(pln);
+            setExpenseTotal(expenseSum);
+            setTransactionsCount(history.length);
+            setRecentTransactions(history.slice(0, 3));
+        } catch (err) {
+            console.log('ERR DASHBOARD SUMMARY:', err?.response?.data || err.message);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', loadSummary);
+        loadSummary();
+
+        return unsubscribe;
+    }, [navigation, loadSummary]);
 
     return (
-        <ScrollView style={[styles.container, { backgroundColor: '#F8FAFC' }]}>
-            {/* Приветствие для приложения управления личными финансами */}
-            <View style={localStyles.headerSection}>
-                <Text style={styles.title}>Witaj!</Text>
-                <Text style={localStyles.welcomeText}>
-                    Sprawdź budżet, wydatki i cele oszczędnościowe w jednym miejscu.
-                </Text>
-            </View>
-
-            {/* Сетка функций */}
-            <View style={localStyles.gridContainer}>
-                <MenuCard title="Dodaj przychód" icon="💸" screen="WalletTopUp" color="#0F766E" />
-                <MenuCard title="Wydatki" icon="🧾" screen="Trade" color="#0F766E" />
-                <MenuCard title="Portfele" icon="💼" screen="Portfolio" color="#2563EB" />
-                <MenuCard title="Historia" icon="📒" screen="History" color="#475569" />
-                <MenuCard title="Statystyki" icon="🧩" screen="Stats" color="#0F766E" />
-                <MenuCard title="Plan i cele" icon="🎯" screen="Insights" color="#1D4ED8" />
-                <MenuCard title="Przypomnienia" icon="⏰" screen="Reminders" color="#F97316" />
-            </View>
-
-            {/* Кнопка выхода */}
-            <TouchableOpacity
-                style={localStyles.logoutButton}
-                onPress={onLogout}
+        <View style={localStyles.screen}>
+            <ScrollView
+                style={styles.container}
+                contentContainerStyle={localStyles.scrollContent}
+                showsVerticalScrollIndicator={false}
             >
-                <Text style={localStyles.logoutText}>Wyloguj się</Text>
-            </TouchableOpacity>
-        </ScrollView>
+                <View style={localStyles.headerSection}>
+                    <Text style={styles.title}>Finanse+</Text>
+                    <Text style={localStyles.welcomeText}>
+                        Najważniejsze dane o budżecie w jednym miejscu.
+                    </Text>
+                </View>
+
+                <View style={localStyles.summaryGrid}>
+                    <TouchableOpacity
+                        style={localStyles.summaryCard}
+                        onPress={() => navigation.navigate('Portfolio')}
+                    >
+                        <Text style={localStyles.summaryLabel}>Saldo</Text>
+                        {loading ? (
+                            <ActivityIndicator size="small" color="#0F766E" />
+                        ) : (
+                            <Text style={localStyles.summaryValue}>{plnBalance.toFixed(2)} PLN</Text>
+                        )}
+                        <Text style={localStyles.summaryHint}>Portfele i konta</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={localStyles.summaryCard}
+                        onPress={() => navigation.navigate('Stats')}
+                    >
+                        <Text style={localStyles.summaryLabel}>Statystyki</Text>
+                        {loading ? (
+                            <ActivityIndicator size="small" color="#0F766E" />
+                        ) : (
+                            <Text style={localStyles.summaryValue}>{transactionsCount}</Text>
+                        )}
+                        <Text style={localStyles.summaryHint}>Liczba operacji</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={localStyles.summaryCard}
+                        onPress={() => navigation.navigate('Trade')}
+                    >
+                        <Text style={localStyles.summaryLabel}>Wydatki</Text>
+                        {loading ? (
+                            <ActivityIndicator size="small" color="#0F766E" />
+                        ) : (
+                            <Text style={localStyles.summaryValue}>{expenseTotal.toFixed(2)} PLN</Text>
+                        )}
+                        <Text style={localStyles.summaryHint}>Dodaj nowy wpis</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={localStyles.sectionHeader}>
+                    <Text style={localStyles.sectionTitle}>Ostatnie operacje</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                        <Text style={localStyles.sectionLink}>Zobacz wszystko</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {recentTransactions.length === 0 ? (
+                    <View style={localStyles.emptyState}>
+                        <Text style={localStyles.emptyTitle}>Brak operacji</Text>
+                        <Text style={localStyles.emptyText}>Dodaj wydatek lub przychód, aby zobaczyć podsumowanie.</Text>
+                    </View>
+                ) : (
+                    recentTransactions.map((item) => (
+                        <View key={item.transaction_id} style={localStyles.transactionRow}>
+                            <View>
+                                <Text style={localStyles.transactionTitle}>{item.type}</Text>
+                                <Text style={localStyles.transactionMeta}>{item.currency_from} → {item.currency_to}</Text>
+                            </View>
+                            <Text style={localStyles.transactionAmount}>{Number(item.amount || 0).toFixed(2)} PLN</Text>
+                        </View>
+                    ))
+                )}
+
+                <View style={localStyles.quickActions}>
+                    <TouchableOpacity
+                        style={[localStyles.actionButton, localStyles.primaryAction]}
+                        onPress={() => navigation.navigate('WalletTopUp')}
+                    >
+                        <Text style={localStyles.actionTextPrimary}>Dodaj przychód</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={localStyles.actionButton}
+                        onPress={() => navigation.navigate('Insights')}
+                    >
+                        <Text style={localStyles.actionText}>Plan i cele</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={localStyles.actionButton}
+                        onPress={() => navigation.navigate('Reminders')}
+                    >
+                        <Text style={localStyles.actionText}>Przypomnienia</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+            <BottomNav navigation={navigation} activeRoute="Dashboard" />
+        </View>
     );
 }
 
 const localStyles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        backgroundColor: '#F8FAFC',
+    },
+    scrollContent: {
+        paddingBottom: 120,
+    },
     headerSection: {
-        marginBottom: 30,
-        paddingTop: 10,
+        marginBottom: 16,
+        paddingTop: 6,
     },
     welcomeText: {
-        fontSize: 16,
+        fontSize: 13,
         color: '#64748B',
         marginTop: 4,
     },
-    gridContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-    },
-    gridCard: {
-        backgroundColor: '#FFFFFF',
-        width: '48%', // Две карточки в ряд с небольшим зазором
-        aspectRatio: 1, // Квадратная форма
-        borderRadius: 24,
-        padding: 20,
+    summaryGrid: {
+        gap: 12,
         marginBottom: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // Мягкая тень
-        shadowColor: '#000',
-        shadowOpacity: 0.05,
-        shadowRadius: 10,
-        elevation: 3,
-        borderWidth: 1,
-        borderColor: '#F1F5F9',
     },
-    iconCircle: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        justifyContent: 'center',
+    summaryCard: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        padding: 14,
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+    },
+    summaryLabel: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: '#94A3B8',
+        textTransform: 'uppercase',
+        letterSpacing: 0.8,
+    },
+    summaryValue: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: '#0F172A',
+        marginTop: 6,
+    },
+    summaryHint: {
+        fontSize: 12,
+        color: '#64748B',
+        marginTop: 4,
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 10,
+        marginTop: 6,
+    },
+    sectionTitle: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#0F172A',
+    },
+    sectionLink: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: '#0F766E',
+    },
+    transactionRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+        borderRadius: 14,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+        marginBottom: 10,
+    },
+    transactionTitle: {
+        fontSize: 13,
+        fontWeight: '700',
+        color: '#0F172A',
+    },
+    transactionMeta: {
+        fontSize: 11,
+        color: '#94A3B8',
+        marginTop: 4,
+    },
+    transactionAmount: {
+        fontSize: 13,
+        fontWeight: '700',
+        color: '#0F766E',
+    },
+    emptyState: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+        padding: 16,
         marginBottom: 12,
     },
-    cardTitle: {
-        fontSize: 15,
+    emptyTitle: {
+        fontSize: 13,
         fontWeight: '700',
-        color: '#1E293B',
-        textAlign: 'center',
-    },
-    logoutButton: {
-        marginTop: 20,
-        marginBottom: 40,
-        padding: 18,
-        borderRadius: 16,
-        backgroundColor: '#E2E8F0',
-        alignItems: 'center',
-    },
-    logoutText: {
         color: '#0F172A',
+    },
+    emptyText: {
+        fontSize: 12,
+        color: '#94A3B8',
+        marginTop: 6,
+    },
+    quickActions: {
+        marginTop: 10,
+        gap: 10,
+    },
+    actionButton: {
+        borderRadius: 12,
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+    },
+    primaryAction: {
+        backgroundColor: '#0F766E',
+        borderColor: '#0F766E',
+    },
+    actionText: {
+        fontSize: 13,
         fontWeight: '700',
-        fontSize: 15,
-    }
+        color: '#0F172A',
+    },
+    actionTextPrimary: {
+        fontSize: 13,
+        fontWeight: '700',
+        color: '#FFFFFF',
+    },
 });

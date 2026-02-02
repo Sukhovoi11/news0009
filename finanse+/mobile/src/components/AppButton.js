@@ -31,12 +31,12 @@ export default function AppButton({ title, onPress, variant = 'primary', style }
 
 const styles = StyleSheet.create({
     button: {
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        borderRadius: 14,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 8,
+        marginVertical: 6,
         // Тень для мобилок
         elevation: 4,
         // Тень для веба и iOS
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         borderColor: '#0F766E',
     },
     text: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '700',
         letterSpacing: 0.5,
     },

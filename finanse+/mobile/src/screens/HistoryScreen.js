@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
 import TransactionItem from '../components/TransactionItem';
+import BottomNav from '../components/BottomNav';
 
-export default function HistoryScreen() {
+export default function HistoryScreen({ navigation }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -37,19 +38,33 @@ export default function HistoryScreen() {
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Historia operacji</Text>
+    <View style={localStyles.screen}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Historia operacji</Text>
 
-      {loading ? (
-        <ActivityIndicator size="large" style={{ marginTop: 16 }} />
-      ) : (
-        <FlatList
-          style={{ marginTop: 12 }}
-          data={items}
-          keyExtractor={(item) => item.transaction_id.toString()}
-          renderItem={renderItem}
-        />
-      )}
+        {loading ? (
+          <ActivityIndicator size="large" style={{ marginTop: 16 }} />
+        ) : (
+          <FlatList
+            style={{ marginTop: 10 }}
+            contentContainerStyle={localStyles.listContent}
+            data={items}
+            keyExtractor={(item) => item.transaction_id.toString()}
+            renderItem={renderItem}
+          />
+        )}
+      </View>
+      <BottomNav navigation={navigation} activeRoute="History" />
     </View>
   );
 }
+
+const localStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+  },
+  listContent: {
+    paddingBottom: 120,
+  },
+});
