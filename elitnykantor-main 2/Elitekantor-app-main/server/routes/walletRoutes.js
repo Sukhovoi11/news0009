@@ -13,6 +13,15 @@ router.post('/topup', auth, (req, res) => {
   if (!amount || amount <= 0)
     return res.status(400).json({ message: 'Kwota doładowania musi być większа niż 0' });
 
+  const insertIncomeTransaction = (callback) => {
+    db.run(
+      `INSERT INTO TRANSACTIONS
+       (user_id, type, currency_from, currency_to, amount, rate)
+       VALUES (?, 'INCOME', 'INCOME', 'PLN', ?, 1)`,
+      [userId, amount],
+      callback
+    );
+  };
 
   db.get(
     'SELECT * FROM WALLET_BALANCE WHERE user_id = ? AND currency_code = ?',
@@ -23,8 +32,11 @@ router.post('/topup', auth, (req, res) => {
           'UPDATE WALLET_BALANCE SET amount = amount + ? WHERE balance_id = ?',
           [amount, row.balance_id],
           (err2) => {
-            if (err2) return res.status(500).json({ message: 'Błąd bazy danych Elitekantor' });
-            res.json({ message: 'Saldo zostało pomyślnie zaktualizowane' });
+            if (err2) return res.status(500).json({ message: 'Błąd bazy danych Finanse+' });
+            insertIncomeTransaction((err3) => {
+              if (err3) return res.status(500).json({ message: 'Błąd zapisu historii transakcji' });
+              res.json({ message: 'Saldo zostało pomyślnie zaktualizowane' });
+            });
           }
         );
       } else {
@@ -33,7 +45,10 @@ router.post('/topup', auth, (req, res) => {
           [userId, currency, amount],
           (err2) => {
             if (err2) return res.status(500).json({ message: 'DB error' });
-            res.json({ message: 'Nowy portfel walutowy został otwarty' });
+            insertIncomeTransaction((err3) => {
+              if (err3) return res.status(500).json({ message: 'Błąd zapisu historii transakcji' });
+              res.json({ message: 'Nowy portfel walutowy został otwarty' });
+            });
           }
         );
       }

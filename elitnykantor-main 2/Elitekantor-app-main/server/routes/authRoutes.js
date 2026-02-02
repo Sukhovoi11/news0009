@@ -45,7 +45,7 @@ router.post('/login', (req, res) => {
 
 
 router.post('/logout', (req, res) => {
-  res.json({ message: 'Wylogowano pomyślnie z Elitekantor' }); // Обновлено
+  res.json({ message: 'Wylogowano pomyślnie z Finanse+' });
 });
 
 module.exports = router;

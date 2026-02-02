@@ -25,9 +25,9 @@ export default function PortfolioScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mój Portfel</Text>
-      <Text style={{ color: '#9A9AA3', marginBottom: 14, fontSize: 14 }}>
-        Stan Twoich aktywów w Elitekantor
+      <Text style={styles.title}>Portfele i konta</Text>
+      <Text style={{ color: '#64748B', marginBottom: 14, fontSize: 14 }}>
+        Podsumowanie aktywów i kont w Twoim budżecie
       </Text>
 
       {loading ? (
@@ -48,7 +48,7 @@ export default function PortfolioScreen() {
                 style={{
                   fontWeight: '800',
                   fontSize: 16,
-                  color: '#F5F5F7',
+                  color: '#0F172A',
                 }}
               >
                 {item.currency_code}
@@ -58,7 +58,7 @@ export default function PortfolioScreen() {
                 style={{
                   fontWeight: '700',
                   fontSize: 16,
-                  color: '#FF2E93',
+                  color: '#0F766E',
                 }}
               >
                 {item.amount.toFixed(2)}

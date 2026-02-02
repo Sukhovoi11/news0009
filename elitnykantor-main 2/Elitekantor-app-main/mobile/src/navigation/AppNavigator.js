@@ -6,11 +6,12 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import WalletTopUpScreen from '../screens/WalletTopUpScreen';
-import RatesScreen from '../screens/RatesScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import PortfolioScreen from '../screens/PortfolioScreen';
 import TradeScreen from '../screens/TradeScreen';
-import RatesHistoryScreen from '../screens/RatesHistoryScreen';
+import SpendingStatsScreen from '../screens/SpendingStatsScreen';
+import BudgetInsightsScreen from '../screens/BudgetInsightsScreen';
+import PaymentRemindersScreen from '../screens/PaymentRemindersScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,9 +21,9 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
             <Stack.Navigator
                 screenOptions={{
                   headerStyle: {
-                    backgroundColor: '#0B0B0F', // ЧЕРНЫЙ
+                    backgroundColor: '#0F172A',
                   },
-                  headerTintColor: '#FF2E93', // РОЗОВЫЙ ТЕКСТ
+                  headerTintColor: '#F8FAFC',
                   headerTitleStyle: {
                     fontWeight: '900',
                     fontSize: 18,
@@ -35,48 +36,53 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
             >
                 {!isLoggedIn ? (
                     <>
-                        <Stack.Screen name="Login" options={{ title: 'EliteKantor – Zaloguj się' }}>
+                        <Stack.Screen name="Login" options={{ title: 'Finanse+ – Zaloguj się' }}>
                             {(props) => <LoginScreen {...props} onLogin={onLogin} />}
                         </Stack.Screen>
-                        <Stack.Screen name="Register" options={{ title: 'Nowe Konto Premium' }}>
+                        <Stack.Screen name="Register" options={{ title: 'Utwórz konto Finanse+' }}>
                             {(props) => <RegisterScreen {...props} />}
                         </Stack.Screen>
                     </>
                 ) : (
                     <>
-                        <Stack.Screen name="Dashboard" options={{ title: 'ELITEKANTOR' }}>
+                        <Stack.Screen name="Dashboard" options={{ title: 'Finanse osobiste' }}>
                             {(props) => <DashboardScreen {...props} onLogout={onLogout} />}
                         </Stack.Screen>
 
                         <Stack.Screen
                             name="WalletTopUp"
                             component={WalletTopUpScreen}
-                            options={{ title: 'Zasilenie Konta' }}
+                            options={{ title: 'Dodaj przychód' }}
                         />
                         <Stack.Screen
                             name="Trade"
                             component={TradeScreen}
-                            options={{ title: 'Giełda Walut' }}
-                        />
-                        <Stack.Screen
-                            name="Rates"
-                            component={RatesScreen}
-                            options={{ title: 'Kursy na Żywo' }}
+                            options={{ title: 'Wydatki i kategorie' }}
                         />
                         <Stack.Screen
                             name="History"
                             component={HistoryScreen}
-                            options={{ title: 'Historia Transakcji' }}
+                            options={{ title: 'Historia operacji' }}
                         />
                         <Stack.Screen
                             name="Portfolio"
                             component={PortfolioScreen}
-                            options={{ title: 'Twój Portfel' }}
+                            options={{ title: 'Portfele i konta' }}
                         />
                         <Stack.Screen
-                            name="RatesHistory"
-                            component={RatesHistoryScreen}
-                            options={{ title: 'Statystyki NBP' }}
+                            name="Stats"
+                            component={SpendingStatsScreen}
+                            options={{ title: 'Statystyki wydatków' }}
+                        />
+                        <Stack.Screen
+                            name="Insights"
+                            component={BudgetInsightsScreen}
+                            options={{ title: 'Plan i cele' }}
+                        />
+                        <Stack.Screen
+                            name="Reminders"
+                            component={PaymentRemindersScreen}
+                            options={{ title: 'Przypomnienia o płatnościach' }}
                         />
                     </>
                 )}

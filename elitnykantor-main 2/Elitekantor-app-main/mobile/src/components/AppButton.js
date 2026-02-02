@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
     },
     primaryButton: {
-        backgroundColor: '#800020', // Наш бордовый
+        backgroundColor: '#0F766E',
         borderWidth: 1,
-        borderColor: '#D4AF37', // Золотая кайма
+        borderColor: '#0F766E',
     },
     secondaryButton: {
         backgroundColor: 'transparent',
         borderWidth: 2,
-        borderColor: '#D4AF37',
+        borderColor: '#0F766E',
     },
     text: {
         fontSize: 16,
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
     },
     secondaryText: {
-        color: '#D4AF37',
+        color: '#0F766E',
     },
 });

@@ -18,20 +18,23 @@ export default function DashboardScreen({ navigation, onLogout }) {
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: '#F8FAFC' }]}>
-            {/* Приветствие в стиле современных финтех-приложений */}
+            {/* Приветствие для приложения управления личными финансами */}
             <View style={localStyles.headerSection}>
-                <Text style={styles.title}>Witaj, Klient!</Text>
-                <Text style={localStyles.welcomeText}>Twój Elitekantor jest gotowy.</Text>
+                <Text style={styles.title}>Witaj!</Text>
+                <Text style={localStyles.welcomeText}>
+                    Sprawdź budżet, wydatki i cele oszczędnościowe w jednym miejscu.
+                </Text>
             </View>
 
             {/* Сетка функций */}
             <View style={localStyles.gridContainer}>
-                <MenuCard title="Doładuj" icon="💳" screen="WalletTopUp" color="#2E7D32" />
-                <MenuCard title="Kantor" icon="🔄" screen="Trade" color="#00C853" />
-                <MenuCard title="Kursy" icon="📈" screen="Rates" color="#004D40" />
-                <MenuCard title="Portfel" icon="💼" screen="Portfolio" color="#1B5E20" />
-                <MenuCard title="Historia" icon="📑" screen="History" color="#455A64" />
-                <MenuCard title="Analiza" icon="📊" screen="RatesHistory" color="#004D40" />
+                <MenuCard title="Dodaj przychód" icon="💸" screen="WalletTopUp" color="#0F766E" />
+                <MenuCard title="Wydatki" icon="🧾" screen="Trade" color="#0F766E" />
+                <MenuCard title="Portfele" icon="💼" screen="Portfolio" color="#2563EB" />
+                <MenuCard title="Historia" icon="📒" screen="History" color="#475569" />
+                <MenuCard title="Statystyki" icon="🧩" screen="Stats" color="#0F766E" />
+                <MenuCard title="Plan i cele" icon="🎯" screen="Insights" color="#1D4ED8" />
+                <MenuCard title="Przypomnienia" icon="⏰" screen="Reminders" color="#F97316" />
             </View>
 
             {/* Кнопка выхода */}
@@ -39,7 +42,7 @@ export default function DashboardScreen({ navigation, onLogout }) {
                 style={localStyles.logoutButton}
                 onPress={onLogout}
             >
-                <Text style={localStyles.logoutText}>Wyloguj z systemu</Text>
+                <Text style={localStyles.logoutText}>Wyloguj się</Text>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -96,11 +99,11 @@ const localStyles = StyleSheet.create({
         marginBottom: 40,
         padding: 18,
         borderRadius: 16,
-        backgroundColor: '#FFF1F2',
+        backgroundColor: '#E2E8F0',
         alignItems: 'center',
     },
     logoutText: {
-        color: '#E11D48',
+        color: '#0F172A',
         fontWeight: '700',
         fontSize: 15,
     }

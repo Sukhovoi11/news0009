@@ -14,7 +14,7 @@ const getBaseURL = () => {
     }
 
     const url = `http://${host}:3000/api`;
-    console.log('--- ELITEKANTOR CONNECTION ---');
+    console.log('--- FINANSE+ CONNECTION ---');
     console.log('Connecting to:', url);
     return url;
   }
@@ -30,7 +30,7 @@ const api = axios.create({
 export const setAuthToken = (token) => {
   if (token) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    console.log('Token set for Elitekantor');
+    console.log('Token set for Finanse+');
   } else {
     delete api.defaults.headers.common['Authorization'];
     console.log('Token removed');

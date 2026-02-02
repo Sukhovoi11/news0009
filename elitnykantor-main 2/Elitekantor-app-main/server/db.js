@@ -56,6 +56,32 @@ db.serialize(() => {
                                                         rate_date DATE NOT NULL
     )
   `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS SAVINGS_GOALS (
+                                                goal_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                user_id INTEGER NOT NULL,
+                                                title TEXT NOT NULL,
+                                                target_amount REAL NOT NULL,
+                                                saved_amount REAL NOT NULL DEFAULT 0,
+                                                due_date TEXT,
+                                                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                                FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS PAYMENT_REMINDERS (
+                                                   reminder_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                   user_id INTEGER NOT NULL,
+                                                   title TEXT NOT NULL,
+                                                   amount REAL,
+                                                   due_date TEXT NOT NULL,
+                                                   is_paid INTEGER NOT NULL DEFAULT 0,
+                                                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                                   FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+    )
+  `);
 });
 
 module.exports = db;
