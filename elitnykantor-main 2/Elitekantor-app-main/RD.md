@@ -1,18 +1,16 @@
-## System Transakcyjny „Elite-Kantor”
+## Aplikacja finansowa „Finanse+”
 
 
 ## Opis
-- Projekt Elite-Kantor to nowoczesny symulator rynku walutowego w formie aplikacji na urządzenia przenośne.
-- Narzędzie to pozwala użytkownikom na bezpieczne testowanie strategii wymiany walut w środowisku wirtualnym,
-- wykorzystując do tego rzeczywiste notowania dostarczane przez NBP. Użytkownik może zarządzać własnym profilem,
-- operować cyfrowym budżetem i monitorować zmiany rynkowe.
+- Projekt Finanse+ to aplikacja mobilna do zarządzania budżetem osobistym i analizą wydatków.
+- Użytkownik może planować budżet, rejestrować przychody oraz wydatki,
+- śledzić cele oszczędnościowe i pilnować terminów płatności.
 ---
 
 ## Architektura
-- **Aplikacja mobilna** – interfejs usera
+- **Aplikacja mobilna** – interfejs użytkownika
 - **Baza danych** – przechowywanie danych
 - **Web Service (Backend)** – logika biznesowa i API
-- **Zewnętrzne API** – publiczne API Narodowego Banku Polskiego
 
 - Uzywane są **REST API** z **HTTPS** i formatu **JSON**.
 
@@ -21,19 +19,18 @@
 
 ## Funkcjonalności
 - Rejestracja i logowanie
-- Wirtualne konto ta jego doladowanie
-- Aktualne i archiwalne kursy walut z API NBP
-- Kupno i sprzedaż walut
-- Historii transakcji
-- Stan portfela walutowego
+- Wirtualne konto oraz dodawanie przychodów
+- Rejestrowanie wydatków z kategoriami
+- Cele oszczędnościowe z możliwością odkładania środków
+- Przypomnienia o płatnościach
+- Historia operacji i podsumowanie budżetu
 
 ---
 
 ## Backend – odpowiedzialności
 - Autoryzacja i uwierzytelnianie użytkowników
-- Integracja z API NBP
 - Walidacja danych wejściowych
-- Przetwarzanie transakcji walutowych
+- Przetwarzanie przychodów, wydatków i celów oszczędnościowych
 - Zarządzanie danymi w bazie danych
 
 ---
@@ -41,9 +38,9 @@
 ## Baza danych
 Aplikacja korzysta z relacyjnej bazy danych przechowującej:
 - użytkowników
-- salda portfeli walutowych
-- historię transakcji
-- aktualne i archiwalne kursy walut
+- salda portfeli (PLN)
+- historię operacji finansowych
+- cele oszczędnościowe i przypomnienia płatności
 
 ---
 

@@ -34,7 +34,7 @@ router.post('/buy', auth, (req, res) => {
         [userId, 'PLN'],
         (errP, pln) => {
           if (!pln || pln.amount < amountPln) {
-            return res.status(400).json({ message: 'Niewystarczające środki PLN na koncie Elitekantor' });
+            return res.status(400).json({ message: 'Niewystarczające środki PLN na koncie Finanse+' });
           }
 
           db.run(

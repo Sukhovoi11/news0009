@@ -5,9 +5,7 @@ const db = require('./db');
 
 const authRoutes = require('./routes/authRoutes');
 const walletRoutes = require('./routes/walletRoutes');
-const ratesRoutes = require('./routes/ratesRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
-const paymentsRoutes = require('./routes/paymentsRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const reminderRoutes = require('./routes/reminderRoutes');
 
@@ -17,9 +15,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/wallet', walletRoutes);
-app.use('/api/rates', ratesRoutes);
 app.use('/api/transactions', transactionRoutes);
-app.use('/api/payments', paymentsRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/reminders', reminderRoutes);
 

@@ -32,7 +32,7 @@ router.post('/topup', auth, (req, res) => {
           'UPDATE WALLET_BALANCE SET amount = amount + ? WHERE balance_id = ?',
           [amount, row.balance_id],
           (err2) => {
-            if (err2) return res.status(500).json({ message: 'Błąd bazy danych Elitekantor' });
+            if (err2) return res.status(500).json({ message: 'Błąd bazy danych Finanse+' });
             insertIncomeTransaction((err3) => {
               if (err3) return res.status(500).json({ message: 'Błąd zapisu historii transakcji' });
               res.json({ message: 'Saldo zostało pomyślnie zaktualizowane' });
